@@ -12,6 +12,7 @@ let t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t
     t118,t119,t120,t121,t122,t123,t124,t125,t126,t127,t128,t129,t130,t131,t132,t133,t134,t135,t136,
     t137,t138,t139,t140,t141,t142,t143,t144,t145;
 let array = [];
+let win;
 let bgSound;
 let faceImg;
 let face;
@@ -70,6 +71,7 @@ let Ok,OkImg;
 let task2,task2Img; 
 let key,keyImg;
 let bg3,bg3Img;
+let screen,screenImg;
 
 function preload(){
   bg = loadAnimation("assets/Map.png");
@@ -81,8 +83,9 @@ function preload(){
   sam6 = loadAnimation("assets/77323.png","assets/77324.png","assets/77325.png");
   sam7 = loadAnimation("assets/77330.png");
   sam8 = loadAnimation("assets/77331.png","assets/77332.png","assets/77333.png");
-  soundFormats('mp3');
-  bgSound = loadSound("01 - Stardew Valley Overture.mp3");
+  soundFormats('mp3','wav');
+  bgSound = loadSound("Music.mp3");
+win = loadSound("win.wav");
   faceImg = loadImage("assets/77317.png");
   healthImg = loadImage("assets/77315.png");
   clockImg = loadImage("assets/77316.png");
@@ -132,12 +135,16 @@ function preload(){
   OkImg = loadImage("assets/OK.png");
   task2Img = loadImage("assets/Task2.png");
   keyImg = loadImage("assets/key.png");
+  screenImg = loadImage("assets/screen.png");
 }
 
 function setup(){
   createCanvas(1340,635);
 
-  bgSound.loop();
+ // bgSound = new Audio('Music.mp3');
+  bgSound.loop(true);
+
+
 
   bg2 = createSprite(672,220,50,50);
   bg2.addImage(bg1);
@@ -256,11 +263,15 @@ function setup(){
   health.addImage(healthImg);
   health.scale = 0.6;
 
- 
+  screen = createSprite(650,635,50,50);
+  screen.addImage(screenImg);
+  screen.scale = 2;
+  screen.visible = true;
 
   inventory = createSprite(670,600,50,50);
   inventory.addImage(inventoryImg);
   inventory.scale = 1.2;
+  
 
   b1 = createSprite(920,580,130,700);
   b2 = createSprite(664,850,650,180);
@@ -589,6 +600,8 @@ function setup(){
   clock.addImage(clockImg);
   clock.scale = 0.8;
 
+
+
   array = [man1,man3,man2,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,fence,pig1,pig2,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,
            b11,b12,b13,b14,b15,b16,b17,b18,b19,b20,b21,b22,
            b23,b24,b25,b26,b27,b28,b29,b30,b31,b32,b33,b34,b35,b36,b37,b38,b39,b40,b41,b42,b43,b44,b45,
@@ -621,6 +634,12 @@ function setup(){
     story.visible = false;
     cut1.visible = false;
   }
+
+if(gameState === 1){
+  screen.visible = false;
+}else {
+  screen.visible = true;
+}
 
   if(mousePressedOver(Controls)){
     control.visible = true;
@@ -665,6 +684,8 @@ function setup(){
     map2.visible = false;
    // l1.visible = false;
 
+   screen.visible = false;
+
     for(var j = 0;j<array1.length;j++){
         array1[j].visible = false;
     }
@@ -685,7 +706,7 @@ function setup(){
 //  pig2.visible = true;
 
 if(keyDown("g")){
-  gameState = 11;
+  gameState = 7;
 }
 
   textFont(clockFont);
@@ -905,6 +926,7 @@ if(keyDown("g")){
     if(mousePressedOver(buy)){
      task.visible = true;
      gameState = 4;
+     win.play(false);
     }
   }else{
     board2.visible = false;
@@ -913,6 +935,8 @@ if(keyDown("g")){
 
 }else if(gameState === 4){
    gold = 175;
+
+   
 
    carrots.visible = true;
    food.visible = true;
@@ -1284,6 +1308,7 @@ if(keyDown("g")){
       l15.scale = 2;
       gameState = 5;
       task.visible = true;
+      win.play(false);
     }
   }  
 }else if(gameState === 5){
@@ -1318,9 +1343,9 @@ if(keyDown("g")){
    text("Press & Hold 'M' to see Map and route.",10,600);
    text("Press & Hold 'T' to see tasks.",10,625);
 
-   textSize(20);
-   text("Touch cow1 and press 'F' to feed and then cow2 .",890,580);
-   text("first feed cow 1 and then cow 2",890,600)
+   textSize(15);
+   text("Touch cow1 and press 'F' to feed and then cow2. first feed cow 1 and then cow 2",890,590);
+   text("cow 2.",890,605)
    text("After feeding it shows green rect, means cow is feeded",890,620);
  
    if(keyDown("T")){
@@ -1532,6 +1557,7 @@ if(keyDown("g")){
       l16.visible = true;
       gameState = 6;
       task.visible = true;
+      win.play(false);
     }
   }
  /*
@@ -1838,7 +1864,7 @@ key.visible = true;
 
   textSize(22);
   fill("darkGreen");
-  text("*new*",890,580);
+  text("*new*",1250,605);
   fill(rgb(3,0,45));
   text("See map and go to beach & find the key.",890,600);
   text("Press 'C' to take the key",890,620);
@@ -2066,6 +2092,7 @@ key.visible = true;
      task.visible = true;
      key.visible = false;
      gameState = 8;
+     win.play(false);
     }
    }else{
     board2.visible = false;
@@ -2285,6 +2312,7 @@ key.visible = true;
       board2.visible = false;
       Ok.visible = false;
       gameState = 9;
+      win.play(false);
     }
   }else {
   Ok.visible = false;
@@ -2508,6 +2536,7 @@ key.visible = true;
       board2.visible = false;
       buy.visible = false;
       gameState = 10;
+      win.play(false);
     }
   }else {
   buy.visible = false;
@@ -2817,6 +2846,7 @@ key.visible = true;
      board2.visible = false;
      sell.visible = false;
      gameState = 11;
+     win.play(false);
    }
  }else {
   sell.visible = false;
@@ -2923,6 +2953,7 @@ for(var r = 16;r<array3.length;r++){
     changeAnimation(sam,"samStand2",sam2);
     changePosition(0,10,sam);
     gameState = 12;
+    win.play(false);
    }
    
    if(keyWentUp("down") || keyWentUp("s")){
@@ -2934,6 +2965,7 @@ for(var r = 16;r<array3.length;r++){
      changeAnimation(sam,"samStand4",sam4);
      changePosition(0,-10,sam);
      gameState = 12;
+     win.play(false);
    }
    
    if(keyWentUp("up") || keyWentUp("w")){
@@ -2945,6 +2977,7 @@ for(var r = 16;r<array3.length;r++){
      changeAnimation(sam,"samStand6",sam6);
      changePosition(10,0,sam);
      gameState = 12;
+     win.play(false);
    }
    
    if(keyWentUp("right") || keyWentUp("d")){
@@ -2956,6 +2989,7 @@ for(var r = 16;r<array3.length;r++){
      changeAnimation(sam,"samStand8",sam8);
      changePosition(-10,0,sam);
      gameState = 12;
+     win.play(false);
    }
    
    if(keyWentUp("left") || keyWentUp("a")){
